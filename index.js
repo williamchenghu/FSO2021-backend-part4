@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 
 const app = express();
 const cors = require('cors');
-const uniqueValidator = require('mongoose-unique-validator');
+
 const config = require('./utils/config');
+const Blog = require('./models/blog');
 
 console.log(`connecting to`, config.MONGODB_URI);
 mongoose
@@ -15,28 +16,6 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-
-const blogSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: true },
-  author: { type: String, required: true },
-  url: { type: String, required: true, unique: true },
-  likes: { type: Number },
-});
-blogSchema.plugin(uniqueValidator);
-
-blogSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    const formattedReturnedObject = {
-      id: returnedObject._id.toString(),
-      ...returnedObject,
-    };
-    delete formattedReturnedObject._id;
-    delete formattedReturnedObject.__v;
-    return formattedReturnedObject;
-  },
-});
-
-const Blog = mongoose.model('Blog', blogSchema);
 
 app.get('/api/blogs', (req, res) => {
   Blog.find({}).then((blogs) => {
