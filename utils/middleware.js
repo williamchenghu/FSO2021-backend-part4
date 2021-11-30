@@ -1,9 +1,9 @@
 const logger = require('./logger');
 
 const requestLogger = (req, res, next) => {
-  logger.log('Method:', req.method);
-  logger.log('Path:  ', req.path);
-  logger.log('Body:  ', req.body);
+  logger.log(`Method: ${req.method}`);
+  logger.log(`Path:   ${req.path}`);
+  logger.log(`Body:   ${JSON.stringify(req.body)}`);
   logger.log('---');
   next();
 };
