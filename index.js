@@ -6,7 +6,7 @@ const app = express();
 const cors = require('cors');
 
 const config = require('./utils/config');
-const Blog = require('./models/blog');
+const blogRouter = require('./controllers/blogs');
 
 console.log(`connecting to`, config.MONGODB_URI);
 mongoose
@@ -16,23 +16,7 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-
-app.get('/api/blogs', (req, res) => {
-  Blog.find({}).then((blogs) => {
-    res.json(blogs);
-  });
-});
-
-app.post('/api/blogs', (req, res, next) => {
-  const blog = new Blog(req.body);
-
-  blog
-    .save()
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((err) => next(err));
-});
+app.use('/api/blogs', blogRouter);
 
 app.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`);
