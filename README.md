@@ -23,3 +23,17 @@ Refactor the application into separate modules as shown earlier in this part of 
 **NB** refactor your application in baby steps and verify that the application works after every change you make. If you try to take a "shortcut" by refactoring many things at once, then [Murphy's law](https://en.wikipedia.org/wiki/Murphy%27s_law) will kick in and it is almost certain that something will break in your application. The "shortcut" will end up taking more time than moving forward slowly and systematically.
 
 One best practice is to commit your code every time it is in a stable state. This makes it easy to rollback to a situation where the application still works.
+
+## Exercises 4.3.-4.7.
+
+Let's create a collection of helper functions that are meant to assist dealing with the blog list. Create the functions into a file called _utils/list_helper.js_. Write your tests into an appropriately named test file under the _tests_ directory.
+
+### Step 3
+
+First define a dummy function that receives an array of blog posts as a parameter and always returns the value 1.
+
+### Step 4
+
+Define a new totalLikes function that receives a list of blog posts as a parameter. The function returns the total sum of _likes_ in all of the blog posts.
+
+Write appropriate tests for the function. It's recommended to put the tests inside of a _describe_ block, so that the test report output gets grouped nicely:
