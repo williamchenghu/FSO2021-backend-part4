@@ -37,3 +37,11 @@ First define a dummy function that receives an array of blog posts as a paramete
 Define a new totalLikes function that receives a list of blog posts as a parameter. The function returns the total sum of _likes_ in all of the blog posts.
 
 Write appropriate tests for the function. It's recommended to put the tests inside of a _describe_ block, so that the test report output gets grouped nicely:
+
+### Step 5
+
+Define a new _favoriteBlog_ function that receives a list of blogs as a parameter. The function finds out which blog has most likes. If there are many top favorites, it is enough to return one of them.
+
+**NB** when you are comparing objects, the [toEqual](https://jestjs.io/docs/en/expect#toequalvalue) method is probably what you want to use, since the [toBe](https://jestjs.io/docs/expect#tobevalue) tries to verify that the two values are the same value, and not just that they contain the same properties.
+
+Write the tests for this exercise inside of a new _describe_ block. Do the same for the remaining exercises as well.
