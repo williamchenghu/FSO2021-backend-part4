@@ -53,3 +53,9 @@ Define a function called _mostBlogs_ that receives an array of blogs as a parame
 If there are many top bloggers, then it is enough to return any one of them.
 
 Finishing this exercise can be done without the use of additional libraries. However, this exercise is a great opportunity to learn how to use the [Lodash](https://lodash.com/) library.
+
+### Step 7
+
+Define a function called _mostLikes_ that receives an array of blogs as its parameter. The function returns the author, whose blog posts have the largest amount of likes. The return value also contains the total number of likes that the author has received.
+
+If there are many top bloggers, then it is enough to show any one of them.

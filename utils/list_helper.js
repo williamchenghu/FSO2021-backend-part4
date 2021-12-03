@@ -1,4 +1,4 @@
-const { countBy, maxBy } = require('lodash');
+const { countBy, maxBy, groupBy, sumBy, map } = require('lodash');
 
 const dummy = () => 1;
 
@@ -41,10 +41,24 @@ const mostBlogsLodash = (blogs) => {
   return maxBy(authorArr, (e) => e.blogs);
 };
 
+const mostLikes = (blogs) => {
+  const authorLikesArr = Array.from(blogs, (e) => ({
+    author: e.author,
+    likes: e.likes,
+  }));
+  const authorGroupObj = groupBy(authorLikesArr, 'author');
+  const authorLikesSum = map(authorGroupObj, (objs, key) => ({
+    author: key,
+    likes: sumBy(objs, 'likes'),
+  }));
+  return maxBy(authorLikesSum, (e) => e.likes);
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
   mostBlogsLodash,
+  mostLikes,
 };

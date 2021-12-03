@@ -101,16 +101,24 @@ describe('favourite choice', () => {
 });
 
 describe('author', () => {
-  const expectation = {
+  const mostBlogs = {
     author: 'Robert C. Martin',
     blogs: 3,
   };
-  test('of the most frequent publisher', () => {
+  const mostLikes = {
+    author: 'Edsger W. Dijkstra',
+    likes: 17,
+  };
+  test('of the most blogs', () => {
     const result = listHelper.mostBlogs(blogs);
-    expect(result).toEqual(expectation);
+    expect(result).toEqual(mostBlogs);
   });
-  test('of the most frequent publisher (lodash)', () => {
+  test('of the most blogs (lodash)', () => {
     const result = listHelper.mostBlogsLodash(blogs);
-    expect(result).toEqual(expectation);
+    expect(result).toEqual(mostBlogs);
+  });
+  test('of the most likes (lodash)', () => {
+    const result = listHelper.mostLikes(blogs);
+    expect(result).toEqual(mostLikes);
   });
 });
