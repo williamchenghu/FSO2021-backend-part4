@@ -1,5 +1,12 @@
 const listHelper = require('../utils/list_helper');
 
+test('dummy returns one', () => {
+  const dummyBlog = [];
+
+  const result = listHelper.dummy(dummyBlog);
+  expect(result).toBe(1);
+});
+
 const emptyBlogList = [];
 
 const listWithOneBlog = [
@@ -64,13 +71,6 @@ const blogs = [
   },
 ];
 
-test('dummy returns one', () => {
-  const dummyBlog = [];
-
-  const result = listHelper.dummy(dummyBlog);
-  expect(result).toBe(1);
-});
-
 describe('total likes', () => {
   test('of empty list is zero', () => {
     const result = listHelper.totalLikes(emptyBlogList);
@@ -105,8 +105,12 @@ describe('author', () => {
     author: 'Robert C. Martin',
     blogs: 3,
   };
-  test.only('of the most frequent publisher', () => {
+  test('of the most frequent publisher', () => {
     const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual(expectation);
+  });
+  test('of the most frequent publisher (lodash)', () => {
+    const result = listHelper.mostBlogsLodash(blogs);
     expect(result).toEqual(expectation);
   });
 });

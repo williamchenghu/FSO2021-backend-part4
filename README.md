@@ -51,3 +51,5 @@ Write the tests for this exercise inside of a new _describe_ block. Do the same 
 Define a function called _mostBlogs_ that receives an array of blogs as a parameter. The function returns the author who has the largest amount of blogs. The return value also contains the number of blogs the top author has.
 
 If there are many top bloggers, then it is enough to return any one of them.
+
+Finishing this exercise can be done without the use of additional libraries. However, this exercise is a great opportunity to learn how to use the [Lodash](https://lodash.com/) library.
