@@ -45,3 +45,9 @@ Define a new _favoriteBlog_ function that receives a list of blogs as a paramete
 **NB** when you are comparing objects, the [toEqual](https://jestjs.io/docs/en/expect#toequalvalue) method is probably what you want to use, since the [toBe](https://jestjs.io/docs/expect#tobevalue) tries to verify that the two values are the same value, and not just that they contain the same properties.
 
 Write the tests for this exercise inside of a new _describe_ block. Do the same for the remaining exercises as well.
+
+### Step 6
+
+Define a function called _mostBlogs_ that receives an array of blogs as a parameter. The function returns the author who has the largest amount of blogs. The return value also contains the number of blogs the top author has.
+
+If there are many top bloggers, then it is enough to return any one of them.
