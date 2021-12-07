@@ -4,9 +4,9 @@
   "description": "FSO 2021 part4 exercise: blog list",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand"
   },
   "keywords": [
     "part4",
@@ -16,6 +16,7 @@
   "author": "williamchenghu",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.3.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-node": "^4.1.0",
@@ -25,17 +26,20 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.2",
     "nodemon": "^2.0.15",
-    "prettier": "^2.5.0"
+    "prettier": "^2.5.0",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.0.14",
     "mongoose-unique-validator": "^3.0.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "verbose": true
   }
 }

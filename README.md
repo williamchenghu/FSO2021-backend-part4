@@ -59,3 +59,17 @@ Finishing this exercise can be done without the use of additional libraries. How
 Define a function called _mostLikes_ that receives an array of blogs as its parameter. The function returns the author, whose blog posts have the largest amount of likes. The return value also contains the total number of likes that the author has received.
 
 If there are many top bloggers, then it is enough to show any one of them.
+
+## Exercises 4.8.-4.12.
+
+### Step 8
+
+Use the supertest package for writing a test that makes an HTTP GET request to the _/api/blogs_ url. Verify that the blog list application returns the correct amount of blog posts in the JSON format.
+
+Once the test is finished, refactor the route handler to use the async/await syntax instead of promises.
+
+Notice that you will have to make similar changes to the code that were made [in the material](https://fullstackopen.com/en/part4/testing_the_backend#test-environment), like defining the test environment so that you can write tests that use their own separate database.
+
+**NB:** When running the tests, you may run into "Mongoose & Jest" environment warning. If this happens, follow the [instructions](https://mongoosejs.com/docs/jest.html) and create a new jest.config.js file at the root of the project.
+
+**NB:** when you are writing your tests it is better to not execute all of your tests, only execute the ones you are working on.
