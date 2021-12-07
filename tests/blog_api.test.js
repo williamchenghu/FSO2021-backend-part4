@@ -35,11 +35,19 @@ beforeEach(async () => {
 });
 
 describe('blog test', () => {
-  test('blogs data get as JSON', async () => {
+  test('blogs data returned as JSON', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/);
+  });
+
+  test('blogs data has id filed', async () => {
+    const blogs = await Blog.find({});
+    return blogs.map((e) => {
+      e.toJSON();
+      return expect(e.id).toBeDefined();
+    });
   });
 });
 
