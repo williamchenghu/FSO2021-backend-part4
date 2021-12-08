@@ -1,40 +1,20 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const helper = require('./blog_api_helper');
 const app = require('../app');
 
 const api = supertest(app);
 const Blog = require('../models/blog');
 
-const initialBlogs = [
-  {
-    title: 'test blog 0',
-    author: 'test author 0',
-    url: 'testURL_0',
-    likes: 2,
-  },
-  {
-    title: 'test blog 1',
-    author: 'test author 1',
-    url: 'testURL_1',
-    likes: 4,
-  },
-  {
-    title: 'test blog 2',
-    author: 'test author 2',
-    url: 'testURL_2',
-    likes: 7,
-  },
-];
-
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObj = new Blog(initialBlogs[0]);
+  let blogObj = new Blog(helper.initialBlogs[0]);
   await blogObj.save();
-  blogObj = new Blog(initialBlogs[1]);
+  blogObj = new Blog(helper.initialBlogs[1]);
   await blogObj.save();
 });
 
-describe('blog test', () => {
+describe('blog list test', () => {
   test('blogs data returned as JSON', async () => {
     await api
       .get('/api/blogs')
@@ -43,11 +23,25 @@ describe('blog test', () => {
   });
 
   test('blogs data has id filed', async () => {
-    const blogs = await Blog.find({});
-    return blogs.map((e) => {
-      e.toJSON();
-      return expect(e.id).toBeDefined();
-    });
+    const blogs = await helper.blogsInDb();
+    expect(blogs).toBeDefined();
+  });
+
+  test('blog creation via post', async () => {
+    const testBlog = {
+      title: 'test blog [soon removed]',
+      author: 'test author [soon removed]',
+      url: 'testURL_[soon_removed]',
+      likes: 0,
+    };
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogSaveResponse = await helper.blogsInDb();
+    expect(blogSaveResponse).toHaveLength(helper.initialBlogs.length + 1);
   });
 });
 
