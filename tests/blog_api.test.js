@@ -43,6 +43,20 @@ describe('blog list test', () => {
     const blogSaveResponse = await helper.blogsInDb();
     expect(blogSaveResponse).toHaveLength(helper.initialBlogs.length + 1);
   });
+
+  test.only('likes to 0 if existent', async () => {
+    const testBlogWithoutLikes = {
+      title: 'test blog [soon removed]',
+      author: 'test author [soon removed]',
+      url: 'testURL_[soon_removed]',
+    };
+    await api.post('/api/blogs').send(testBlogWithoutLikes);
+    const blogSaveResponse = await helper.blogsInDb();
+    const blogLookUp = blogSaveResponse.find(
+      (e) => e.title === testBlogWithoutLikes.title
+    );
+    expect(blogLookUp.likes).toBe(0);
+  });
 });
 
 afterAll(() => {

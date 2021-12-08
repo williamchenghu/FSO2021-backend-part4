@@ -85,3 +85,9 @@ Make the required changes to the code so that it passes the test. The [toJSON](h
 Write a test that verifies that making an HTTP POST request to the _/api/blogs_ url successfully creates a new blog post. At the very least, verify that the total number of blogs in the system is increased by one. You can also verify that the content of the blog post is saved correctly to the database.
 
 Once the test is finished, refactor the operation to use async/await instead of promises.
+
+### Step 11
+
+Write a test that verifies that if the _likes_ property is missing from the request, it will default to the value 0. Do not test the other properties of the created blogs yet.
+
+Make the required changes to the code so that it passes the test.
