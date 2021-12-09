@@ -19,7 +19,7 @@ describe('blog list tests', () => {
       .expect('Content-Type', /application\/json/);
   });
 
-  test.only('blogs data has id field', async () => {
+  test('blogs data has id field', async () => {
     const blogs = await helper.blogsInDb();
     blogs.map((e) => expect(e.id).toBeDefined());
   });
@@ -76,7 +76,7 @@ describe('blog deletion tests', () => {
   test('deletion with id test', async () => {
     const existingBlogs = await helper.blogsInDb();
     const blogToDelete = existingBlogs[0];
-    // test if deletion was completed
+    // test if deletion was completed with right status report
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
     // test if deletion have changed the dataset in DB
     const blogsAfterDeletion = await helper.blogsInDb();
@@ -84,6 +84,27 @@ describe('blog deletion tests', () => {
     // test if deletion was done to the right target
     const blogsTitleArray = blogsAfterDeletion.map((e) => e.title);
     expect(blogsTitleArray).not.toContain(blogToDelete.title);
+  });
+});
+
+describe('blog updates tests', () => {
+  test('update likes of a blog', async () => {
+    const existingBlogs = await helper.blogsInDb();
+    const blogToUpdate = {
+      ...existingBlogs[0],
+      likes: existingBlogs[0].likes + 1,
+    };
+    // test if update was completed with right status report
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200);
+    // test if likes of the target blog was updated with correct amount
+    const blogsAfterUpdate = await helper.blogsInDb();
+    const blogUpdated = blogsAfterUpdate.find(
+      (e) => e.title === blogToUpdate.title
+    );
+    expect(blogUpdated.likes).toBe(blogUpdated.likes);
   });
 });
 
