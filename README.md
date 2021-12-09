@@ -97,3 +97,13 @@ Make the required changes to the code so that it passes the test.
 Write a test related to creating new blogs via the _/api/blogs_ endpoint, that verifies that if the _title_ and _url_ properties are missing from the request data, the backend responds to the request with the status code _400 Bad Request_.
 
 Make the required changes to the code so that it passes the test.
+
+## Exercises 4.13.-4.14.
+
+### Step 13
+
+Implement functionality for deleting a single blog post resource.
+
+Use the async/await syntax. Follow [RESTful](https://fullstackopen.com/en/part3/node_js_and_express#rest) conventions when defining the HTTP API.
+
+Feel free to implement tests for the functionality if you want to. Otherwise verify that the functionality works with Postman or some other tool.

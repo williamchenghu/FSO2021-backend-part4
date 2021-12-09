@@ -8,13 +8,10 @@ const Blog = require('../models/blog');
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObj = new Blog(helper.initialBlogs[0]);
-  await blogObj.save();
-  blogObj = new Blog(helper.initialBlogs[1]);
-  await blogObj.save();
+  await Blog.insertMany(helper.initialBlogs);
 });
 
-describe('blog list test', () => {
+describe('blog list tests', () => {
   test('blogs data returned as JSON', async () => {
     await api
       .get('/api/blogs')
@@ -22,33 +19,36 @@ describe('blog list test', () => {
       .expect('Content-Type', /application\/json/);
   });
 
-  test('blogs data has id filed', async () => {
+  test.only('blogs data has id field', async () => {
     const blogs = await helper.blogsInDb();
-    expect(blogs).toBeDefined();
+    blogs.map((e) => expect(e.id).toBeDefined());
   });
+});
 
-  test('blog creation via post', async () => {
+describe('blog creation tests', () => {
+  test('creation via post', async () => {
     const testBlog = {
-      title: 'test blog [soon removed]',
-      author: 'test author [soon removed]',
-      url: 'testURL_[soon_removed]',
+      title: 'test blog TEMP',
+      author: 'test author TEMP',
+      url: 'testURL_TEMP',
       likes: 0,
     };
+    // test if data save was completed with right status report
     await api
       .post('/api/blogs')
       .send(testBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
-
+    // test if data save have changed the dataset in DB
     const blogSaveResponse = await helper.blogsInDb();
     expect(blogSaveResponse).toHaveLength(helper.initialBlogs.length + 1);
   });
 
-  test('likes to 0 if existent', async () => {
+  test('assign 0 to likes if non-existent', async () => {
     const testBlogWithoutLikes = {
-      title: 'test blog [soon removed]',
-      author: 'test author [soon removed]',
-      url: 'testURL_[soon_removed]',
+      title: 'test blog TEMP',
+      author: 'test author TEMP',
+      url: 'testURL_TEMP',
     };
     await api.post('/api/blogs').send(testBlogWithoutLikes);
 
@@ -61,10 +61,29 @@ describe('blog list test', () => {
 
   test('Bad request without title and url', async () => {
     const testBlogWithoutTitleAndUrl = {
-      author: 'test author [soon removed]',
+      author: 'test author TEMP',
       likes: 7,
     };
+    // test if date save was rejected due to bad request
     await api.post('/api/blogs').send(testBlogWithoutTitleAndUrl).expect(400);
+    // test if database have been affected or not
+    const blogsInDb = await helper.blogsInDb();
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe('blog deletion tests', () => {
+  test('deletion with id test', async () => {
+    const existingBlogs = await helper.blogsInDb();
+    const blogToDelete = existingBlogs[0];
+    // test if deletion was completed
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    // test if deletion have changed the dataset in DB
+    const blogsAfterDeletion = await helper.blogsInDb();
+    expect(blogsAfterDeletion).toHaveLength(helper.initialBlogs.length - 1);
+    // test if deletion was done to the right target
+    const blogsTitleArray = blogsAfterDeletion.map((e) => e.title);
+    expect(blogsTitleArray).not.toContain(blogToDelete.title);
   });
 });
 
