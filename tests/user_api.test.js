@@ -26,6 +26,7 @@ describe('user creation test (with exisiting user in DB)', () => {
     const user = new User({ username: 'preUser', passwordHash });
     await user.save();
   });
+
   test('creation via post', async () => {
     // test if user creation was completed with right status report
     const existingUsers = await helper.usersInDb();
@@ -45,6 +46,30 @@ describe('user creation test (with exisiting user in DB)', () => {
     // test if user name exists in the dataset after creation
     const usernameArray = usersInDbAfterSave.map((e) => e.username);
     expect(usernameArray).toContain(newUser.username);
+  });
+
+  test('creation fail due to missing username', async () => {
+    const existingUsers = await helper.usersInDb();
+    const newUser = {
+      name: 'New User',
+      password: 'newUserTopSecret',
+    };
+    await api.post('/api/users').send(newUser).expect(400);
+    // test if user creation failure have changed the dataset in DB
+    const usersInDbAfterSave = await helper.usersInDb();
+    expect(usersInDbAfterSave).toHaveLength(existingUsers.length);
+  });
+
+  test('creation fail due to missing password', async () => {
+    const existingUsers = await helper.usersInDb();
+    const newUser = {
+      username: 'newUserCreationTest',
+      name: 'New User',
+    };
+    await api.post('/api/users').send(newUser).expect(400);
+    // test if user creation failure have changed the dataset in DB
+    const usersInDbAfterSave = await helper.usersInDb();
+    expect(usersInDbAfterSave).toHaveLength(existingUsers.length);
   });
 });
 

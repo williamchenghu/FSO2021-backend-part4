@@ -129,3 +129,13 @@ Implement a way to create new users by doing a HTTP POST-request to address _api
 Do not save passwords to the database as clear text, but use the _bcrypt_ library like we did in part 4 chapter [Creating new users](https://fullstackopen.com/en/part4/user_administration#creating-users).
 
 Implement a way to see the details of all users by doing a suitable HTTP request.
+
+### Step 16
+
+Add a feature which adds the following restrictions to creating new users: Both username and password must be given. Both username and password must be at least 3 characters long. The username must be unique.
+
+The operation must respond with a suitable status code and some kind of an error message if invalid user is created.
+
+**NB** Do not test password restrictions with Mongoose validations. It is not a good idea because the password received by the backend and the password hash saved to the database are not the same thing. The password length should be validated in the controller like we did in [part 3](https://fullstackopen.com/en/part3/node_js_and_express) before using Mongoose validation.
+
+Also, implement tests which check that invalid users are not created and invalid add user operation returns a suitable status code and error message.

@@ -10,6 +10,12 @@ userRouter.get('/', async (req, res) => {
 });
 
 userRouter.post('/', async (req, res) => {
+  if (!req.body.password || req.body.password.length <= 3) {
+    res
+      .status(400)
+      .send({ error: 'password is missing or less than 3 digits' });
+    return;
+  }
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(req.body.password, saltRounds);
   const user = new User({
