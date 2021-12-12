@@ -4,7 +4,8 @@ const Blog = require('../models/blog');
 
 blogRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({});
-  res.json(blogs);
+  const blogsParsed = blogs.map((e) => e.toJSON());
+  res.json(blogsParsed);
 });
 
 blogRouter.post('/', async (req, res) => {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
-const helper = require('./blog_api_helper');
+const helper = require('./api_test_helper');
 const app = require('../app');
 
 const api = supertest(app);
