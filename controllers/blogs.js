@@ -1,22 +1,35 @@
 const blogRouter = require('express').Router();
 require('express-async-errors');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
   const blogsParsed = blogs.map((e) => e.toJSON());
   res.json(blogsParsed);
 });
 
 blogRouter.post('/', async (req, res) => {
+  const usersInDb = await User.find({});
+  const usersIdArray = usersInDb.map((e) => e.id);
+  const randomUserId =
+    usersIdArray[Math.floor(Math.random() * usersIdArray.length)];
+  // const user = await User.findById(req.body.userId);
+  const user = await User.findById(randomUserId);
   let reqBody;
-  if (req.body > 0) {
-    reqBody = req.body;
+  if (req.body.likes > 0) {
+    reqBody = { ...req.body, user: user._id };
   } else {
-    reqBody = { ...req.body, likes: 0 };
+    reqBody = { ...req.body, user: user._id, likes: 0 };
   }
   const blog = new Blog(reqBody);
   const result = await blog.save();
+  user.blogs = user.blogs.concat(result._id);
+  await user.updateOne({ blogs: user.blogs });
   res.status(201).json(result);
 });
 
