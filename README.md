@@ -147,3 +147,7 @@ Expand blogs so that each blog contains information on the creator of the blog.
 Modify adding new blogs so that when a new blog is created, _any_ user from the database is designated as its creator (for example the one found first). Implement this according to part 4 chapter [populate](https://fullstackopen.com/en/part4/user_administration#populate). Which user is designated as the creator does not matter just yet. The functionality is finished in exercise 4.19.
 
 Modify listing all blogs so that the creator's user information is displayed with the blog, and listing all users also displays the blogs created by each user.
+
+### Step 18
+
+Implement token-based authentication according to part 4 chapter [Token authentication](https://fullstackopen.com/en/part4/token_authentication).
