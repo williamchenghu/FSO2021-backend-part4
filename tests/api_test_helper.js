@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const config = require('../utils/config');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
@@ -39,4 +41,24 @@ const usersInDb = async () => {
   return users.map((e) => e.toJSON());
 };
 
-module.exports = { initialBlogs, initialUsers, blogsInDb, usersInDb };
+const tokenForTest = async () => {
+  const testUser = await User.findOne({ username: initialUsers[0].username });
+  const testUserForToken = {
+    username: testUser.username,
+    id: testUser._id,
+  };
+  const authenScheme = 'Bearer ';
+  return authenScheme.concat(
+    jwt.sign(testUserForToken, config.SECRET, {
+      expiresIn: '5m',
+    })
+  );
+};
+
+module.exports = {
+  initialBlogs,
+  initialUsers,
+  blogsInDb,
+  usersInDb,
+  tokenForTest,
+};

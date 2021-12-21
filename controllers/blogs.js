@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken');
 const blogRouter = require('express').Router();
 require('express-async-errors');
+const config = require('../utils/config');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
@@ -13,13 +15,25 @@ blogRouter.get('/', async (req, res) => {
   res.json(blogsParsed);
 });
 
+const getTokenFromHeader = (req) => {
+  const authorizationHeader = req.get('authorization');
+  if (
+    authorizationHeader &&
+    authorizationHeader.toLowerCase().startsWith('bearer ')
+  ) {
+    return authorizationHeader.substring(7);
+  }
+  return null;
+};
+
 blogRouter.post('/', async (req, res) => {
-  const usersInDb = await User.find({});
-  const usersIdArray = usersInDb.map((e) => e.id);
-  const randomUserId =
-    usersIdArray[Math.floor(Math.random() * usersIdArray.length)];
-  // const user = await User.findById(req.body.userId);
-  const user = await User.findById(randomUserId);
+  const token = getTokenFromHeader(req);
+  const decodedToken = jwt.verify(token, config.SECRET);
+  if (!token || !decodedToken.id) {
+    res.status(401).json({ error: 'token missing or invalid' });
+    return;
+  }
+  const user = await User.findById(decodedToken.id);
   let reqBody;
   if (req.body.likes > 0) {
     reqBody = { ...req.body, user: user._id };

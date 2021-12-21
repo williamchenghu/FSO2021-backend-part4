@@ -151,3 +151,7 @@ Modify listing all blogs so that the creator's user information is displayed wit
 ### Step 18
 
 Implement token-based authentication according to part 4 chapter [Token authentication](https://fullstackopen.com/en/part4/token_authentication).
+
+### Step 19
+
+Modify adding new blogs so that it is only possible if a valid token is sent with the HTTP POST request. The user identified by the token is designated as the creator of the blog.
