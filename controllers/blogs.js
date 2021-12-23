@@ -36,8 +36,24 @@ blogRouter.post('/', async (req, res) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => {
-  await Blog.findByIdAndRemove(req.params.id);
-  res.status(204).end();
+  const decodedToken = jwt.verify(req.token, config.SECRET);
+  const blogToDelete = await Blog.findById(req.params.id);
+  if (!blogToDelete) {
+    res.status(400).json({ error: 'cannot find blog to delete' });
+    return;
+  }
+  if (!req.token || !decodedToken.id) {
+    res.status(401).json({ error: 'token missing or invalid' });
+    return;
+  }
+  if (decodedToken.id === blogToDelete.user.toString()) {
+    await Blog.findByIdAndRemove(req.params.id);
+    res.status(204).end();
+    return;
+  }
+  res
+    .status(401)
+    .json({ error: 'non-creator cannot delete blog belongs to others ' });
 });
 
 blogRouter.put('/:id', async (req, res) => {

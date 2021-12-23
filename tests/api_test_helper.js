@@ -9,12 +9,14 @@ const initialBlogs = [
     author: 'test author 0',
     url: 'testURL_0',
     likes: 2,
+    user: '61c4d017685ddce5da022c8f',
   },
   {
     title: 'test blog 1',
     author: 'test author 1',
     url: 'testURL_1',
     likes: 4,
+    user: '61c4d017685ddce5da022c9f',
   },
 ];
 

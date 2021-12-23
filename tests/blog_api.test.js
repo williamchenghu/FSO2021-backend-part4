@@ -30,8 +30,8 @@ describe('blog list tests', () => {
   });
 });
 
-describe('blog creation with token', () => {
-  test('creation via post', async () => {
+describe('blog creation tests', () => {
+  test('creation with token', async () => {
     const testToken = await helper.tokenForTest();
     const testBlog = {
       title: 'test blog TEMP',
@@ -53,7 +53,7 @@ describe('blog creation with token', () => {
     const decodedTestToken = jwt.verify(testToken.substring(7), config.SECRET);
     const testTokenCreater = decodedTestToken.id;
     const blogCreated = await Blog.findOne(testBlog);
-    const userOfBlogCreated = blogCreated.user.valueOf();
+    const userOfBlogCreated = blogCreated.user.toString();
     expect(testTokenCreater).toBe(userOfBlogCreated);
   });
 
@@ -82,7 +82,7 @@ describe('blog creation with token', () => {
       author: 'test author TEMP',
       likes: 7,
     };
-    // test if date save was rejected due to bad request
+    // test if date save would be rejected due to bad request
     await api
       .post('/api/blogs')
       .set('Authorization', testToken)
@@ -92,10 +92,8 @@ describe('blog creation with token', () => {
     const blogsInDb = await helper.blogsInDb();
     expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
   });
-});
 
-describe('blog creation with invalid token', () => {
-  test('creation fail', async () => {
+  test('creation fail with invalid token', async () => {
     const invalidToken = 'bearer invalidTokenFortTest';
     const testBlog = {
       title: 'test blog TEMP',
@@ -103,7 +101,7 @@ describe('blog creation with invalid token', () => {
       url: 'testURL_TEMP',
       likes: 0,
     };
-    // test if data save was completed with right status report
+    // test if data save would fail with according status number returned
     await api
       .post('/api/blogs')
       .set('Authorization', invalidToken)
@@ -116,17 +114,64 @@ describe('blog creation with invalid token', () => {
 });
 
 describe('blog deletion tests', () => {
-  test('deletion with id test', async () => {
-    const existingBlogs = await helper.blogsInDb();
-    const blogToDelete = existingBlogs[0];
+  test('deletion with token', async () => {
+    const testToken = await helper.tokenForTest();
+    const testBlog = {
+      title: 'test blog TEMP',
+      author: 'test author TEMP',
+      url: 'testURL_TEMP',
+      likes: 0,
+    };
+    await api.post('/api/blogs').set('Authorization', testToken).send(testBlog);
+    const blogCreated = await Blog.findOne(testBlog);
+    const blogToDelete = blogCreated.toJSON();
     // test if deletion was completed with right status report
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', testToken)
+      .expect(204);
     // test if deletion have changed the dataset in DB
     const blogsAfterDeletion = await helper.blogsInDb();
-    expect(blogsAfterDeletion).toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogsAfterDeletion).toHaveLength(helper.initialBlogs.length + 1 - 1);
     // test if deletion was done to the right target
     const blogsTitleArray = blogsAfterDeletion.map((e) => e.title);
     expect(blogsTitleArray).not.toContain(blogToDelete.title);
+  });
+
+  test('non-creator deletion fail', async () => {
+    const testToken = await helper.tokenForTest();
+    const existingBlogs = await helper.blogsInDb();
+    const wrongBlogToDelete = existingBlogs[1];
+    // test if deletion was completed with right status report
+    await api
+      .delete(`/api/blogs/${wrongBlogToDelete.id}`)
+      .set('Authorization', testToken)
+      .expect(401);
+    // test if database have been affected or not
+    const blogsInDb = await helper.blogsInDb();
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test('deletion fail with invalid token', async () => {
+    const testToken = await helper.tokenForTest();
+    const invalidToken = 'bearer invalidTokenFortTest';
+    const testBlog = {
+      title: 'test blog TEMP',
+      author: 'test author TEMP',
+      url: 'testURL_TEMP',
+      likes: 0,
+    };
+    await api.post('/api/blogs').set('Authorization', testToken).send(testBlog);
+    const blogCreated = await Blog.findOne(testBlog);
+    const blogToDelete = blogCreated.toJSON();
+    // test if deletion would fail with according status number returned
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', invalidToken)
+      .expect(401);
+    // test if database have been affected or not
+    const blogsInDb = await helper.blogsInDb();
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length + 1);
   });
 });
 

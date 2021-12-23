@@ -161,3 +161,9 @@ Modify adding new blogs so that it is only possible if a valid token is sent wit
 [This example](https://fullstackopen.com/en/part4/token_authentication) from part 4 shows taking the token from the header with the `getTokenFrom` helper function.
 
 If you used the same solution, refactor taking the token to a [middleware](https://fullstackopen.com/en/part3/node_js_and_express#middleware). The middleware should take the token from the _Authorization_ header and place it to the _token_ field of the _request_ object.
+
+### Step 21
+
+Change the delete blog operation so that a blog can be deleted only by the user who added the blog. Therefore, deleting a blog is possible only if the token sent with the request is the same as that of the blog's creator.
+
+If deleting a blog is attempted without a token or by a wrong user, the operation should return a suitable status code.
