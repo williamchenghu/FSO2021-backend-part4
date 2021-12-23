@@ -31,7 +31,7 @@ describe('blog list tests', () => {
 });
 
 describe('blog creation with token', () => {
-  test.only('creation via post', async () => {
+  test('creation via post', async () => {
     const testToken = await helper.tokenForTest();
     const testBlog = {
       title: 'test blog TEMP',

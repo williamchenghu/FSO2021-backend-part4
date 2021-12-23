@@ -15,21 +15,9 @@ blogRouter.get('/', async (req, res) => {
   res.json(blogsParsed);
 });
 
-const getTokenFromHeader = (req) => {
-  const authorizationHeader = req.get('authorization');
-  if (
-    authorizationHeader &&
-    authorizationHeader.toLowerCase().startsWith('bearer ')
-  ) {
-    return authorizationHeader.substring(7);
-  }
-  return null;
-};
-
 blogRouter.post('/', async (req, res) => {
-  const token = getTokenFromHeader(req);
-  const decodedToken = jwt.verify(token, config.SECRET);
-  if (!token || !decodedToken.id) {
+  const decodedToken = jwt.verify(req.token, config.SECRET);
+  if (!req.token || !decodedToken.id) {
     res.status(401).json({ error: 'token missing or invalid' });
     return;
   }

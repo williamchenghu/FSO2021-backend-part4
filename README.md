@@ -155,3 +155,9 @@ Implement token-based authentication according to part 4 chapter [Token authenti
 ### Step 19
 
 Modify adding new blogs so that it is only possible if a valid token is sent with the HTTP POST request. The user identified by the token is designated as the creator of the blog.
+
+### Step 20
+
+[This example](https://fullstackopen.com/en/part4/token_authentication) from part 4 shows taking the token from the header with the `getTokenFrom` helper function.
+
+If you used the same solution, refactor taking the token to a [middleware](https://fullstackopen.com/en/part3/node_js_and_express#middleware). The middleware should take the token from the _Authorization_ header and place it to the _token_ field of the _request_ object.
