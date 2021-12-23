@@ -167,3 +167,9 @@ If you used the same solution, refactor taking the token to a [middleware](https
 Change the delete blog operation so that a blog can be deleted only by the user who added the blog. Therefore, deleting a blog is possible only if the token sent with the request is the same as that of the blog's creator.
 
 If deleting a blog is attempted without a token or by a wrong user, the operation should return a suitable status code.
+
+### Step 22
+
+Both the new blog creation and blog deletion need to find out the identity of the user who is doing the operation. The middleware `tokenExtractor` that we did in exercise 4.20 helps but still both the handlers of _post_ and _delete_ operations need to find out who is the user holding a specific token.
+
+Do now a new middleware `userExtractor`, that finds out the user and sets it to the request object. When you register the middleware in _app.js_ the user will be set in the field `request.user`.
