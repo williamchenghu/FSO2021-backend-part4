@@ -93,6 +93,20 @@ describe('blog creation tests', () => {
     expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
   });
 
+  test('creation fail without token', async () => {
+    const testBlog = {
+      title: 'test blog TEMP',
+      author: 'test author TEMP',
+      url: 'testURL_TEMP',
+      likes: 0,
+    };
+    // test if data save would fail with according status number returned
+    await api.post('/api/blogs').send(testBlog).expect(401);
+    // test if database have been affected or not
+    const blogsInDb = await helper.blogsInDb();
+    expect(blogsInDb).toHaveLength(helper.initialBlogs.length);
+  });
+
   test('creation fail with invalid token', async () => {
     const invalidToken = 'bearer invalidTokenFortTest';
     const testBlog = {

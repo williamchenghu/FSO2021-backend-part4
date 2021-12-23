@@ -173,3 +173,7 @@ If deleting a blog is attempted without a token or by a wrong user, the operatio
 Both the new blog creation and blog deletion need to find out the identity of the user who is doing the operation. The middleware `tokenExtractor` that we did in exercise 4.20 helps but still both the handlers of _post_ and _delete_ operations need to find out who is the user holding a specific token.
 
 Do now a new middleware `userExtractor`, that finds out the user and sets it to the request object. When you register the middleware in _app.js_ the user will be set in the field `request.user`.
+
+### Step 23
+
+After adding token based authentication the tests for adding a new blog broke down. Fix the tests. Also write a new test to ensure adding a blog fails with the proper status code _401 Unauthorized_ if a token is not provided.
