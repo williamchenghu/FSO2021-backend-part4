@@ -1,2 +1,3 @@
-DELETE http://localhost:3003/api/blogs/61b7b7c4400469ab0e427cf3
+DELETE http://localhost:3003/api/blogs/BLOG_TO_BE_DELETED_ID
 Content-Type: application/json
+Authorization: Bearer USER_LOGIN_TOKEN

@@ -1,2 +1,2 @@
-DELETE http://localhost:3003/api/users/61b60f1a6af0aedba8d368ab
+DELETE http://localhost:3003/api/users/USER_TO_BE_DELETED_ID
 Content-Type: application/json
