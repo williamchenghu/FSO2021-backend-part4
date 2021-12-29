@@ -4,8 +4,6 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 
 blogRouter.get('/', async (req, res) => {
-  console.log(`req.token`, req.token);
-  console.log(`req.userId`, req.userId);
   if (!req.token || !req.userId) {
     res.status(401).json({ error: 'token missing or invalid' });
     return;
