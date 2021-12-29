@@ -1,11 +1,15 @@
-const jwt = require('jsonwebtoken');
 const blogRouter = require('express').Router();
 require('express-async-errors');
-const config = require('../utils/config');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
 blogRouter.get('/', async (req, res) => {
+  console.log(`req.token`, req.token);
+  console.log(`req.userId`, req.userId);
+  if (!req.token || !req.userId) {
+    res.status(401).json({ error: 'token missing or invalid' });
+    return;
+  }
   const blogs = await Blog.find({}).populate('user', {
     username: 1,
     name: 1,
@@ -16,12 +20,11 @@ blogRouter.get('/', async (req, res) => {
 });
 
 blogRouter.post('/', async (req, res) => {
-  const decodedToken = jwt.verify(req.token, config.SECRET);
-  if (!req.token || !decodedToken.id) {
+  if (!req.token || !req.userId) {
     res.status(401).json({ error: 'token missing or invalid' });
     return;
   }
-  const user = await User.findById(decodedToken.id);
+  const user = await User.findById(req.userId);
   let reqBody;
   if (req.body.likes > 0) {
     reqBody = { ...req.body, user: user._id };
@@ -36,17 +39,16 @@ blogRouter.post('/', async (req, res) => {
 });
 
 blogRouter.delete('/:id', async (req, res) => {
-  const decodedToken = jwt.verify(req.token, config.SECRET);
   const blogToDelete = await Blog.findById(req.params.id);
   if (!blogToDelete) {
     res.status(400).json({ error: 'cannot find blog to delete' });
     return;
   }
-  if (!req.token || !decodedToken.id) {
+  if (!req.token || !req.userId) {
     res.status(401).json({ error: 'token missing or invalid' });
     return;
   }
-  if (decodedToken.id === blogToDelete.user.toString()) {
+  if (req.userId === blogToDelete.user.toString()) {
     await Blog.findByIdAndRemove(req.params.id);
     res.status(204).end();
     return;
@@ -57,6 +59,10 @@ blogRouter.delete('/:id', async (req, res) => {
 });
 
 blogRouter.put('/:id', async (req, res) => {
+  if (!req.token || !req.userId) {
+    res.status(401).json({ error: 'token missing or invalid' });
+    return;
+  }
   const updatedResult = await Blog.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
